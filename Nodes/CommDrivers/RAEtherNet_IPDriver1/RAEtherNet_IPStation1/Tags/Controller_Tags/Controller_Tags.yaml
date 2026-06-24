@@ -1,0 +1,11 @@
+Name: Controller Tags
+Type: FolderType
+Children:
+- Name: SORTIDA
+  Type: RAEtherNetIPTag
+  DataType: Int32
+  Children:
+  - Name: SymbolName
+    Type: BaseDataVariableType
+    DataType: String
+    Value: "SORTIDA"
