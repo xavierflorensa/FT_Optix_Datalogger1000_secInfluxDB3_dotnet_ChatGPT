@@ -25,7 +25,8 @@ public class RuntimeNetLogic1 : BaseNetLogic
     public override void Start()
     {
         // Insert code to be executed when the user-defined logic is started
-        
+        var variable1= Project.Current.GetVariable("Model/Variable1");
+        int sencer = variable1.Value;
         try
         {
             // InfluxDB v3 configuration
@@ -40,7 +41,7 @@ public class RuntimeNetLogic1 : BaseNetLogic
                 // Create write point for InfluxDB v3
                 var point = PointData.Measurement(table)
                     .SetTag("host", "server01")
-                    .SetField("value", 5555)
+                    .SetField("value", sencer)
                     .SetTimestamp(DateTime.UtcNow);
                 
                 // Write data to InfluxDB v3 database
