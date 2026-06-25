@@ -23,10 +23,24 @@ using InfluxDB3.Client.Write;
 public class RuntimeNetLogic1 : BaseNetLogic
 {
     PeriodicTask myTask1;
+    private string influxUrl;
+    private string influxToken;
+    private string influxDatabase;
+    private string influxTable;
+    private InfluxDBClient influxClient;
+
     
     public override void Start()
     {
         // Insert code to be executed when the user-defined logic is started
+        // InfluxDB v3 configuration (initialize once)
+        influxUrl = "http://127.0.0.1:8181";
+        influxToken = "apiv3_33VhRYYjZdWdZQdum74hpF3tpX0pDNwmqpY7yOL_TCPTRM-KnEwbpYLr612L-T-9PDSZ0RJZsB38-LU5LYMFBQ";
+        influxDatabase = "OPTIX1";
+        influxTable = "DataLogger1";
+        // Create InfluxDB client once and reuse it for every write
+        influxClient = new InfluxDBClient(host: influxUrl, token: influxToken, database: influxDatabase);
+
         myTask1 = new PeriodicTask(write_Function, 1000, LogicObject);
         myTask1.Start();
     }
@@ -35,6 +49,7 @@ public class RuntimeNetLogic1 : BaseNetLogic
     {
         // Insert code to be executed when the user-defined logic is stopped
         myTask1.Dispose();
+        influxClient?.Dispose();
     }
 
     private void write_Function()
@@ -45,25 +60,15 @@ public class RuntimeNetLogic1 : BaseNetLogic
             var variable1 = Project.Current.GetVariable("Model/Variable1");
             int sencer = variable1.Value;
 
-            // InfluxDB v3 configuration
-            string url = "http://127.0.0.1:8181";
-            string token = "apiv3_33VhRYYjZdWdZQdum74hpF3tpX0pDNwmqpY7yOL_TCPTRM-KnEwbpYLr612L-T-9PDSZ0RJZsB38-LU5LYMFBQ";
-            string database = "OPTIX1";
-            string table = "DataLogger1";
+            // Reuse the InfluxDB client without recreating it each cycle
+            var point = PointData.Measurement(influxTable)
+                .SetTag("host", "server01")
+                .SetField("value", sencer)
+                .SetTimestamp(DateTime.UtcNow);
 
-            // Create InfluxDB v3 client
-            using (var client = new InfluxDBClient(host: url, token: token, database: database))
-            {
-                // Create write point for InfluxDB v3
-                var point = PointData.Measurement(table)
-                    .SetTag("host", "server01")
-                    .SetField("value", sencer)
-                    .SetTimestamp(DateTime.UtcNow);
+            influxClient.WritePointAsync(point: point).Wait();
 
-                // Write data to InfluxDB v3 database
-                client.WritePointAsync(point: point).Wait();
-                Log.Info($"Value {sencer} inserted successfully into InfluxDB v3 database {database}");
-            }
+            
         }
         catch (Exception ex)
         {
