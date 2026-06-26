@@ -121,3 +121,7 @@ Children:
   Children:
   - File: DataTypes/DataTypes.yaml
   - File: VariableTypes/VariableTypes.yaml
+- Name: Timeout
+  Type: BaseDataVariableType
+  DataType: Duration
+  Value: "0:00:00:00.0100000"

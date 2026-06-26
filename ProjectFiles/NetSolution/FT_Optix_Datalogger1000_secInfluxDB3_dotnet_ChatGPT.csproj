@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="InfluxDB3.Client" Version="1.9.0"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0"/>
   </ItemGroup>
   <Import Project="FT_Optix_Datalogger1000_secInfluxDB3_dotnet_ChatGPT.references"/>
 </Project>

@@ -9,3 +9,6 @@ Children:
     Type: BaseDataVariableType
     DataType: String
     Value: "SORTIDA"
+  - Name: ArrayUpdateMode
+    Type: BaseDataVariableType
+    DataType: TagArrayUpdateMode

@@ -3,3 +3,17 @@ Type: NetLogicCategoryFolder
 Children:
 - Name: RuntimeNetLogic1
   Type: NetLogic
+  Children:
+  - Name: VariablePLC
+    Type: BaseDataVariableType
+    DataType: Int32
+    Children:
+    - Name: DynamicLink
+      Type: DynamicLink
+      DataType: NodePath
+      Value: "../../../Model/Variable1"
+      Children:
+      - Name: Mode
+        Type: BaseVariableType
+        DataType: DynamicLinkMode
+        Value: 2
